@@ -20,6 +20,7 @@ const db = mysql.createConnection({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
+  port: process.env.DB_PORT,
 });
 
 db.connect((err) => {
@@ -34,8 +35,11 @@ app.get("/users", (req, res) => {
   });
 });
 
+app.get("/health", (req, res) => {
+  res.sendStatus(200);
+});
 app.get("/", (req, res) => {
-  res.json({ message: "ok" });
+  res.status(200).json({ message: "ok" });
 });
 
 app.listen(PORT, () => {
