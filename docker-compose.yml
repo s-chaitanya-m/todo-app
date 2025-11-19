@@ -9,24 +9,35 @@ services:
     env_file:
       - ./backend/.env
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   frontend:
     build: ./frontend
     container_name: frontend
     ports:
       - "5173:5173"
+    env_file:
+      - ./frontend/.env
+    depends_on:
+      - backend
 
   mysql:
     image: mysql:8
-    container_name: mysql-db
+    container_name: mysql
     environment:
-      - MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
-      - MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
     ports:
       - "3306:3306"
     volumes:
+      - ./mysql.sql:/docker-entrypoint-initdb.d/mysql.sql
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3  
 
 volumes:
   mysql_data:
