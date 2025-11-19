@@ -31,7 +31,7 @@ jobs:
           IMAGE_TAG=$(date +%s)
           FE_ECR="665871828762.dkr.ecr.us-east-1.amazonaws.com/todo-frontend"
 
-          docker build -t $FE_ECR:$IMAGE_TAG ./fe
+          docker build -t $FE_ECR:$IMAGE_TAG ./frontend
           docker push $FE_ECR:$IMAGE_TAG
 
           echo "IMAGE_URI=$ECR_URL:$IMAGE_TAG" >> $GITHUB_ENV
@@ -42,7 +42,7 @@ jobs:
           IMAGE_TAG=$(date +%s)
           BE_ECR="665871828762.dkr.ecr.us-east-1.amazonaws.com/todo-backend"
 
-          docker build -t $BE_ECR:$IMAGE_TAG ./be
+          docker build -t $BE_ECR:$IMAGE_TAG ./backend
           docker push $BE_ECR:$IMAGE_TAG
 
           echo "IMAGE_URI=$ECR_URL:$IMAGE_TAG" >> $GITHUB_ENV
